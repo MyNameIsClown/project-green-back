@@ -1,5 +1,7 @@
 package project.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +14,19 @@ public class UserServiceImpl implements UserServiceI{
 	UserDAO repository;
 	
 	public User getUserById(Long id) {
-		User user = repository.findById(id).get();
-		System.out.println(user.toString());
-		return user;
+		return repository.findById(id).get();
+	}
+
+	public List<User> getAll() {
+		return repository.findAll();
+	}
+
+	@Override
+	public void createUser(User user) {
+		repository.save(user);
+	}
+	
+	public Boolean isPresent(Long id) {
+		return repository.existsById(id);
 	}
 }
