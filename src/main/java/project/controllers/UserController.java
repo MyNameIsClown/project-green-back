@@ -1,24 +1,17 @@
 package project.controllers;
 
-import java.util.List;
-import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import project.models.User;
 import project.models.dto.CreateUserRequest;
+import project.models.dto.UserResponse;
 import project.services.UserServiceI;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("project-green/user")
@@ -42,15 +35,15 @@ public class UserController {
 	
 	@PostMapping("/register")
 	@ResponseBody
-	public ResponseEntity<User> createUserWithUserRole(@RequestBody CreateUserRequest createUserRequest) {
+	public ResponseEntity<UserResponse> createUserWithUserRole(@RequestBody CreateUserRequest createUserRequest) {
 		User user = service.createUserWithUserRole(createUserRequest);
-		return ResponseEntity.status(HttpStatus.CREATED).body(user);
+		return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.convertTo(user));
 	}
 	@PostMapping("/register/admin")
 	@ResponseBody
-	public ResponseEntity<User> createUserWithAdminRole(@RequestBody CreateUserRequest createUserRequest) {
+	public ResponseEntity<UserResponse> createUserWithAdminRole(@RequestBody CreateUserRequest createUserRequest) {
 		User user = service.createUserWithAdminRole(createUserRequest);
-		return ResponseEntity.status(HttpStatus.CREATED).body(user);
+		return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.convertTo(user));
 	}
 	
 	
