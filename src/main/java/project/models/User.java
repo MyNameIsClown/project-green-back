@@ -1,21 +1,22 @@
 package project.models;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="user")
@@ -94,5 +95,12 @@ public class User implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return enabled;
+	}
+	public static Set<UserRoles>getUserRoleFromString(String role){
+		if(role.equalsIgnoreCase("admin")){
+			return Set.of(UserRoles.ADMIN);
+		}else{
+			return Set.of(UserRoles.USER);
+		}
 	}
 }

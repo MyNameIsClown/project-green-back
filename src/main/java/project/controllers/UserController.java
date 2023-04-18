@@ -6,31 +6,45 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.models.User;
+import project.models.UserRoles;
 import project.models.dto.CreateUserRequest;
 import project.models.dto.UserResponse;
+import project.repo.UserRepository;
 import project.services.UserServiceI;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
+import java.util.Set;
 
 @RestController
-@RequestMapping("project-green/user")
+@RequestMapping("/project-green")
 @RequiredArgsConstructor
 public class UserController {
 	@Autowired
 	private final UserServiceI service;
-	
-	@GetMapping("{id}")
-	@ResponseBody
-	public User getUserById(@PathVariable UUID id) {
-		System.out.println(service.isPresent(id));
-		return service.findById(id).get();
+	@Autowired
+	private final UserRepository repository;
+	@GetMapping("/user/{username}")
+	public Optional<UserResponse> getUserByUsername(@PathVariable("username")String username){
+		Optional<User> user = service.findByUsername(username);
+		if(user.isPresent()){
+			return Optional.of(UserResponse.convertTo(user.get()));
+		}
+		return Optional.empty();
+	}
+	@GetMapping("/user/type/{rol}")
+	public List<UserResponse> getUserByRole(@PathVariable("rol")String rol){
+		Set<UserRoles> roles = Set.of(UserRoles.fromString(rol));
+		List<User> users = repository.findByRolesIn(roles);
+		return users.stream().map(user -> UserResponse.convertTo(user)).toList();
 	}
 	
-	@GetMapping("")
+	@GetMapping("/users")
 	@ResponseBody
-	public List<User> getUsers() {
-		return service.findAll();
+	public List<UserResponse> getUsers() {
+		return service.findAll().stream()
+				.map(u->UserResponse.convertTo(u))
+				.toList();
 	}
 	
 	@PostMapping("/register")

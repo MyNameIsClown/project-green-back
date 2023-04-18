@@ -12,8 +12,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import project.security.error.JwtAccessDeniedHandler;
 import project.security.error.JwtAuthenticationEntryPoint;
+import project.security.jwt.service.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -23,11 +25,12 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
         return (web) -> web.ignoring()
-                .requestMatchers("/project-green/user/register");
+                .requestMatchers("/project-green/**");
     }
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception{
@@ -52,10 +55,14 @@ public class SecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeHttpRequests()
-                    .requestMatchers("/project-green/user/register/admin").hasRole("ADMIN")
+                    .requestMatchers("/project-green/**").permitAll()
+                .and()
+                    .authorizeHttpRequests()
+                    .requestMatchers("/project-green/register/admin").hasRole("ADMIN")
                     .anyRequest().authenticated();
 
-        //httpSecurity.addFilterBefore();
+
+        httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         httpSecurity.headers().frameOptions().disable();
 

@@ -13,6 +13,7 @@ import javax.crypto.SecretKey;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.UUID;
 
 @Log
 @Service
@@ -35,8 +36,8 @@ public class JwtService {
                 .build();
     }
 
-    public String generateToken(Authentication authetication) {
-        User user = (User) authetication.getPrincipal();
+    public String generateToken(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
 
         Date tokenExpirationDateTime = Date.from(
                 LocalDateTime
@@ -64,5 +65,11 @@ public class JwtService {
             log.info("Error con el token " + ex.getMessage());
         }
         return false;
+    }
+
+    public UUID getUserIdFromJwtToken(String token){
+        return UUID.fromString(
+                jwtParser.parseClaimsJwt(token).getBody().getSubject()
+        );
     }
 }

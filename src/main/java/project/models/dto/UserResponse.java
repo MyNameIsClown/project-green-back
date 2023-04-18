@@ -11,7 +11,7 @@ import project.models.User;
 @AllArgsConstructor
 @Builder
 public class UserResponse {
-    private String username, email, fullname;
+    protected String username, email, fullname;
 
     public static UserResponse convertTo(User user){
         return UserResponse.builder()
