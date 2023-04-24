@@ -3,16 +3,13 @@ package project.models.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import project.models.User;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 public class JwtUserResponse extends UserResponse{
     private String token;
-
     public JwtUserResponse (UserResponse userResponse){
         username = userResponse.getUsername();
         fullname = userResponse.getFullname();

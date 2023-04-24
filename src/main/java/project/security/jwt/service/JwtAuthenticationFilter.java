@@ -47,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
             }
         }catch (Exception e){
-            log.info("Authentication failed using token JTW " + token);
+            log.info("Authentication failed using token JWT: " + token);
         }
         filterChain.doFilter(request, response);
     }

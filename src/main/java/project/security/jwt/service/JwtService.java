@@ -20,7 +20,7 @@ import java.util.UUID;
 public class JwtService {
     public static final String TOKEN_TYPE = "JWT";
     public static final String TOKEN_HEADER = "Authorization";
-    public static final String TOKEN_PREFIX = "Bearer";
+    public static final String TOKEN_PREFIX = "Bearer ";
     @Value("${jwt.secret}")
     private String jwtSecret;
     @Value("${jwt.duration}")
@@ -58,7 +58,7 @@ public class JwtService {
 
     public boolean validateToken(String token) {
         try {
-            jwtParser.parseClaimsJwt(token);
+            jwtParser.parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException |
                  IllegalArgumentException ex) {
@@ -69,7 +69,7 @@ public class JwtService {
 
     public UUID getUserIdFromJwtToken(String token){
         return UUID.fromString(
-                jwtParser.parseClaimsJwt(token).getBody().getSubject()
+                jwtParser.parseClaimsJws(token).getBody().getSubject()
         );
     }
 }
