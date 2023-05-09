@@ -29,7 +29,7 @@ public class UserController {
 	private final AuthenticationManager authenticationManager;
 	@Autowired
 	private final JwtService jwtService;
-	@GetMapping("/admin/user/{username}")
+	@GetMapping("/users/user/{username}")
 	public Optional<UserResponse> getUserByUsername(@PathVariable("username")String username){
 		Optional<User> user = service.findByUsername(username);
 		if(user.isPresent()){
