@@ -1,0 +1,5 @@
+branch-defaults:
+  (BACK-006)-(feature)-Manejo-de-sessiones,-autenticacion-y-permisos:
+    environment: production
+global:
+  profile: eb-cli

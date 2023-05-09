@@ -1,14 +1,13 @@
 package project.services;
 
+import project.models.User;
+import project.models.UserRoles;
+import project.models.dto.CreateUserRequest;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-
-import org.springframework.security.core.userdetails.UserDetails;
-import project.models.User;
-import project.models.UserRoles;
-import project.models.dto.CreateUserRequest;
 
 public interface UserServiceI {
 	public Optional<User> findById(UUID id);
@@ -23,5 +22,7 @@ public interface UserServiceI {
 	public void deleteById(UUID id);
 	public void delete(User user);
 	public Optional<User> findByUsername(String username);
+	public List<User> findByRole(String role);
+	public Boolean matchesPassword(User user, String clearPassword);
 
 }

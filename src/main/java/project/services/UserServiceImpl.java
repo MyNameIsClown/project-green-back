@@ -1,19 +1,18 @@
 package project.services;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import project.models.User;
 import project.models.UserRoles;
 import project.models.dto.CreateUserRequest;
 import project.repo.UserRepository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +22,6 @@ public class UserServiceImpl implements UserServiceI{
 	@Autowired
 	private final PasswordEncoder passwordEncoder;
 
-	
 	public Optional<User> findById(UUID id) {
 		return repository.findById(id);
 	}
@@ -46,10 +44,10 @@ public class UserServiceImpl implements UserServiceI{
 	}
 
 	public User createUserWithUserRole(CreateUserRequest createUserRequest){
-		return createUser(createUserRequest, Set.of(UserRoles.USER));
+		return createUser(createUserRequest, Set.of(new UserRoles(UserRoles.USER)));
 	}
 	public User createUserWithAdminRole(CreateUserRequest createUserRequest){
-		return createUser(createUserRequest, Set.of(UserRoles.ADMIN));
+		return createUser(createUserRequest, Set.of(new UserRoles(UserRoles.ADMIN)));
 	}
 
 	@Override
@@ -86,6 +84,16 @@ public class UserServiceImpl implements UserServiceI{
 	@Override
 	public Optional<User> findByUsername(String username) {
 		return repository.findFirstByUsername(username);
+	}
+
+	@Override
+	public List<User> findByRole(String role) {
+		return repository.findByRoles(role);
+	}
+
+	@Override
+	public Boolean matchesPassword(User user, String clearPassword) {
+		return passwordEncoder.matches(clearPassword, user.getPassword());
 	}
 
 
