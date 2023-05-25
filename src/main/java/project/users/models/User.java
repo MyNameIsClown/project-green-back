@@ -1,4 +1,4 @@
-package project.models;
+package project.users.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,15 +12,17 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import project.carbonFootprint.models.CarbonFootprintData;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name="user")
+@Table(name="USER")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -47,16 +49,6 @@ public class User implements UserDetails {
 	@Column(name="full_name")
 	private String fullName;
 
-	@Column(name="eco_reputation")
-	private String ecoReputation;
-
-	@Column(name="green_points")
-	@Builder.Default
-	private Integer greenPoints = 0;
-
-	@Column(name="avatar")
-	private String avatar;
-
 	@Builder.Default
 	@Column(name="account_non_expired")
 	private boolean accountNonExpired = true;
@@ -72,6 +64,13 @@ public class User implements UserDetails {
 	@Builder.Default
 	@Column(name="enabled")
 	private boolean enabled = true;
+
+	@Builder.Default
+	@Column(name="carbon_footprint_is_calculated")
+	private boolean carbonFootprintIsCalculated = false;
+
+	@OneToMany(mappedBy = "user")
+	private List<CarbonFootprintData> carbonFootprintData;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(

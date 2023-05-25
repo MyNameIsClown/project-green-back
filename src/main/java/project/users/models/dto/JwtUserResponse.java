@@ -1,9 +1,9 @@
-package project.models.dto;
+package project.users.models.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import project.models.User;
+import project.users.models.User;
 
 @Data
 @NoArgsConstructor
@@ -16,7 +16,7 @@ public class JwtUserResponse extends UserResponse{
         email = userResponse.getEmail();
     }
     public static JwtUserResponse of (User user, String token){
-        JwtUserResponse result =  new JwtUserResponse(UserResponse.convertTo(user));
+        JwtUserResponse result =  new JwtUserResponse(convertTo(user));
         result.setToken(token);
         return result;
     }

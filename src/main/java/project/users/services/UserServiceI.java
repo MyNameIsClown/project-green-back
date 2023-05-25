@@ -1,8 +1,8 @@
-package project.services;
+package project.users.services;
 
-import project.models.User;
-import project.models.UserRoles;
-import project.models.dto.CreateUserRequest;
+import project.users.models.User;
+import project.users.models.UserRoles;
+import project.users.models.dto.CreateUserRequest;
 
 import java.util.List;
 import java.util.Optional;

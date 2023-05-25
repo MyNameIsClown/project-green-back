@@ -1,13 +1,13 @@
-package project.services;
+package project.users.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import project.models.User;
-import project.models.UserRoles;
-import project.models.dto.CreateUserRequest;
-import project.repo.UserRepository;
+import project.users.models.User;
+import project.users.models.UserRoles;
+import project.users.models.dto.CreateUserRequest;
+import project.users.repo.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserServiceI{
 		User user = User.builder()
 				.username(createUserRequest.getUsername())
 				.password(passwordEncoder.encode(createUserRequest.getPassword()))
-				.avatar(createUserRequest.getAvatar())
 				.fullName(createUserRequest.getFullName())
 				.roles(roles)
 				.email(createUserRequest.getEmail())
@@ -53,7 +52,6 @@ public class UserServiceImpl implements UserServiceI{
 	@Override
 	public Optional<User> editInfo(User user) {
 		return repository.findById(user.getId()).map(u -> {
-			u.setAvatar(user.getAvatar());
 			u.setFullName(user.getFullName());
 			u.setEmail(user.getEmail());
 			return repository.save(u);

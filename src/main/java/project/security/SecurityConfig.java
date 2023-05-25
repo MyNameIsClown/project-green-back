@@ -15,7 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
-import project.models.UserRoles;
+import project.users.models.UserRoles;
 import project.security.error.JwtAccessDeniedHandler;
 import project.security.error.JwtAuthenticationEntryPoint;
 import project.security.jwt.service.JwtAuthenticationFilter;

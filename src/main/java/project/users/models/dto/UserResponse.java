@@ -1,10 +1,10 @@
-package project.models.dto;
+package project.users.models.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import project.models.User;
+import project.users.models.User;
 
 @Data
 @NoArgsConstructor

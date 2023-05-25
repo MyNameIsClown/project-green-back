@@ -7,7 +7,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import project.models.User;
+import project.users.models.User;
 
 import javax.crypto.SecretKey;
 import java.time.LocalDateTime;

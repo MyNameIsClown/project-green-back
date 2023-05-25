@@ -1,4 +1,4 @@
-package project.controllers;
+package project.users.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +11,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import project.models.User;
-import project.models.dto.*;
 import project.security.jwt.service.JwtService;
-import project.services.UserServiceI;
+import project.users.models.Role;
+import project.users.models.User;
+import project.users.models.dto.*;
+import project.users.services.RoleServiceI;
+import project.users.services.UserServiceI;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +27,8 @@ import java.util.Optional;
 public class UserController {
 	@Autowired
 	private final UserServiceI service;
+	@Autowired
+	private final RoleServiceI serviceRole;
 	@Autowired
 	private final AuthenticationManager authenticationManager;
 	@Autowired
@@ -55,6 +59,13 @@ public class UserController {
 	public ResponseEntity<UserResponse> createUserWithUserRole(@RequestBody CreateUserRequest createUserRequest) {
 		User user = service.createUserWithUserRole(createUserRequest);
 		return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.convertTo(user));
+	}
+
+	@PostMapping("/users/createRoles")
+	@ResponseBody
+	public ResponseEntity<Role> createRoles(@RequestBody List<Role> roles) {
+		serviceRole.createRoles(roles);
+		return ResponseEntity.status(HttpStatus.CREATED).body(null);
 	}
 	@PostMapping("/admin/register")
 	@ResponseBody

@@ -1,4 +1,4 @@
-package project.models.dto;
+package project.users.models.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChangePasswordRequest {
-    String oldPassword, newPassword, verifyNewPassword;
+public class CreateUserRequest {
+    private String username, password, verifyPassword, avatar, fullName, email;
 }

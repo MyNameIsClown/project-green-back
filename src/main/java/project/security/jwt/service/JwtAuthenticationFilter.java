@@ -11,8 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import project.models.User;
-import project.services.UserServiceI;
+import project.users.models.User;
+import project.users.services.UserServiceI;
 
 import java.io.IOException;
 import java.util.Optional;
