@@ -66,7 +66,7 @@ public class User implements UserDetails {
 	private boolean enabled = true;
 
 	@Builder.Default
-	@Column(name="carbon_footprint_is_calculated")
+	@Column(name="hasCO2Footprint")
 	private boolean carbonFootprintIsCalculated = false;
 
 	@OneToMany(mappedBy = "user")
