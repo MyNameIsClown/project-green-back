@@ -9,14 +9,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import project.carbonFootprint.models.CarbonFootprintData;
 import project.carbonFootprint.models.dto.CalculationRequest;
-import project.carbonFootprint.models.transportation.TransportationUseData;
+import project.carbonFootprint.models.dto.CalculationResponse;
 import project.carbonFootprint.repo.TransportationUseDataRepository;
-import project.carbonFootprint.services.CarbonFootprintDataServiceI;
+import project.carbonFootprint.services.CarbonFootprintCalculationI;
 import project.security.jwt.service.JwtService;
 import project.users.models.User;
-
-import java.sql.Date;
-import java.time.LocalDate;
+import project.users.models.dto.UserResponse;
 
 @RestController
 @RequestMapping("/api/carbonFootprint")
@@ -28,24 +26,21 @@ public class CarbonFootprintCalcController {
     @Autowired
     private final JwtService jwtService;
     @Autowired
-    private final CarbonFootprintDataServiceI carbonFootprintDataService;
-
+    private final CarbonFootprintCalculationI carbonFootprintDataService;
     @Autowired
     private final TransportationUseDataRepository transportationUseDataRepository;
 
     @PostMapping("/calculation")
     @ResponseBody
-    public ResponseEntity<String> createUserWithUserRole(@RequestBody CalculationRequest calculationRequest, @AuthenticationPrincipal User userLogged) {
-        CarbonFootprintData carbonFootprintData = CarbonFootprintData.builder()
-                        .user(userLogged)
-                        .date(Date.valueOf(LocalDate.now()))
+    public ResponseEntity<CalculationResponse> createUserWithUserRole(@RequestBody CalculationRequest calculationRequest, @AuthenticationPrincipal User userLogged) {
+        CarbonFootprintData carbonFootprintData = carbonFootprintDataService.calculate(calculationRequest, userLogged);
+        CalculationResponse response = CalculationResponse.builder()
+                .user(UserResponse.convertTo(userLogged))
+                .totalCo2Emitted(carbonFootprintData.getCo2Emitted())
+                .totalGreenScore(carbonFootprintData.getGreenScore())
                 .build();
-        carbonFootprintDataService.save(carbonFootprintData);
-        TransportationUseData transportationUseData = TransportationUseData.of(calculationRequest.getTransportationUseData());
-        transportationUseData.setCarbonFootprintData(carbonFootprintData);
-        carbonFootprintData.setTransportationUseData(transportationUseData);
-        carbonFootprintDataService.save(carbonFootprintData);
-        return ResponseEntity.status(HttpStatus.OK).body("pùta");
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
 

@@ -12,8 +12,8 @@ public class CarbonFootprintDataServiceImpl implements CarbonFootprintDataServic
     @Autowired
     private CarbonFootprintDataRepository repository;
     @Override
-    public void save(CarbonFootprintData carbonFootprintData) {
-        repository.save(carbonFootprintData);
+    public CarbonFootprintData save(CarbonFootprintData carbonFootprintData) {
+        return repository.save(carbonFootprintData);
     }
 
     @Override

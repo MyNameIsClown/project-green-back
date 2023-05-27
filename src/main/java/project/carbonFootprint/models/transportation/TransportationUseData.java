@@ -30,20 +30,24 @@ public class TransportationUseData {
     private CarbonFootprintData carbonFootprintData;
     @OneToMany(mappedBy = "transportationUseData", cascade = CascadeType.ALL)
     private List<TransportationUse> transportationUses;
+    @Column
+    private Double co2Emitted;
+    @Column
+    private Integer greenScore;
 
     public static TransportationUseData of(List<project.carbonFootprint.models.dto.carbonFootprintData.TransportationUseData> transportationUseData){
+        TransportationUseData response = TransportationUseData.builder().build();
         List<TransportationUse> transportationUsesList = new ArrayList<>();
         for(project.carbonFootprint.models.dto.carbonFootprintData.TransportationUseData t: transportationUseData){
             transportationUsesList.add(TransportationUse.builder()
-                            .vehicleType(t.getVehicleType())
-                            .timeIntervalInDays(t.getTimeIntervalInDays())
-                            .transportationName(t.getTransportName())
-                            .distanceTravelInKm(t.getDistanceTravelInKm())
+                    .vehicleType(t.getVehicleType())
+                    .timeIntervalInDays(t.getTimeIntervalInDays())
+                    .transportationName(t.getTransportName())
+                    .distanceTravelInKm(t.getDistanceTravelInKm())
+                            .transportationUseData(response)
                     .build());
         }
-
-        return TransportationUseData.builder()
-                .transportationUses(transportationUsesList)
-                .build();
+        response.setTransportationUses(transportationUsesList);
+        return response;
     }
 }

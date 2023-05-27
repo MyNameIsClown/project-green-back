@@ -9,6 +9,7 @@ import lombok.extern.java.Log;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import project.carbonFootprint.models.CarbonFootprintData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,6 +28,24 @@ public class WasteProductionData {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "carbon_footprint_id", nullable = false, referencedColumnName = "id")
     private CarbonFootprintData carbonFootprintData;
-    @OneToMany(mappedBy = "wasteProductionData")
+    @OneToMany(mappedBy = "wasteProductionData", cascade = CascadeType.ALL)
     private List<WasteProduction> wasteProductions;
+    @Column
+    private Double co2Emitted;
+    @Column
+    private Integer greenScore;
+
+    public static WasteProductionData of(List<project.carbonFootprint.models.dto.carbonFootprintData.WasteProductionData> wasteProductionData){
+        WasteProductionData response = WasteProductionData.builder().build();
+        List<WasteProduction> wasteProductionList = new ArrayList<>();
+        for(project.carbonFootprint.models.dto.carbonFootprintData.WasteProductionData data: wasteProductionData){
+            wasteProductionList.add(WasteProduction.builder()
+                            .wasteProductionData(response)
+                            .consume(data.getProduction())
+                            .wasteType(data.getWasteType())
+                    .build());
+        }
+        response.setWasteProductions(wasteProductionList);
+        return response;
+    }
 }

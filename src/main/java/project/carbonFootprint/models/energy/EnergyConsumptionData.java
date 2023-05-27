@@ -9,6 +9,7 @@ import lombok.extern.java.Log;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import project.carbonFootprint.models.CarbonFootprintData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,6 +28,26 @@ public class EnergyConsumptionData {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "carbon_footprint_id", nullable = false, referencedColumnName = "id")
     private CarbonFootprintData carbonFootprintData;
-    @OneToMany(mappedBy = "energyConsumptionData")
+    @OneToMany(mappedBy = "energyConsumptionData", cascade = CascadeType.ALL)
     private List<EnergyConsumption> energyConsumptions;
+    @Column
+    private Double co2Emitted;
+
+    @Column
+    private Integer greenScore;
+
+    public static EnergyConsumptionData of(List<project.carbonFootprint.models.dto.carbonFootprintData.EnergyConsumptionData> energyConsumptionData){
+        EnergyConsumptionData response = EnergyConsumptionData.builder().build();
+        List<EnergyConsumption> energyConsumptionList = new ArrayList<>();
+        for(project.carbonFootprint.models.dto.carbonFootprintData.EnergyConsumptionData data: energyConsumptionData){
+            energyConsumptionList.add(EnergyConsumption.builder()
+                            .energyConsumptionData(response)
+                            .energyType(data.getEnergyType())
+                            .consume(data.getConsume())
+                            .timeIntervalInDays(data.getTimeIntervalInDays())
+                    .build());
+        }
+        response.setEnergyConsumptions(energyConsumptionList);
+        return response;
+    }
 }

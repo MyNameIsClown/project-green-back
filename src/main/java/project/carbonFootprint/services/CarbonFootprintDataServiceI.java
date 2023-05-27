@@ -4,6 +4,6 @@ import project.carbonFootprint.models.CarbonFootprintData;
 
 
 public interface CarbonFootprintDataServiceI {
-    void save(CarbonFootprintData carbonFootprintData);
+    CarbonFootprintData save(CarbonFootprintData carbonFootprintData);
     CarbonFootprintData get(Long id);
 }

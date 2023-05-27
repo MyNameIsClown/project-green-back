@@ -42,7 +42,7 @@ public class CarbonFootprintData {
     @OneToOne(mappedBy = "carbonFootprintData", cascade = CascadeType.ALL)
     private WasteProductionData wasteProductionData;
     @Column
-    private Integer co2Emitted;
+    private Double co2Emitted;
     @Column
     private Integer greenScore;
 }
