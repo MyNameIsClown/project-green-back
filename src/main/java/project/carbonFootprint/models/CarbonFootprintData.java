@@ -1,10 +1,7 @@
 package project.carbonFootprint.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.java.Log;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import project.carbonFootprint.models.energy.EnergyConsumptionData;
