@@ -1,0 +1,22 @@
+branch-defaults:
+  (BACK-006)-(feature)-Manejo-de-sessiones,-autenticacion-y-permisos:
+    environment: production
+  rc-1:
+    environment: project-green-back-dev
+    group_suffix: null
+deploy:
+  artifact: target/project-green-back-0.1.0.jar
+global:
+  application_name: project-green-back
+  branch: null
+  default_ec2_keyname: project-green-secret-manager-3457
+  default_platform: Corretto 17 running on 64bit Amazon Linux 2
+  default_region: eu-west-1
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: eb-cli
+  repository: null
+  sc: git
+  workspace_type: Application
