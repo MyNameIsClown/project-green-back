@@ -45,7 +45,7 @@ public class UserController {
 	}
 	@GetMapping("/admin/user/type/{rol}")
 	public List<UserResponse> getUserByRole(@PathVariable("rol")String rol){
-		return service.findByRole(rol).stream().map(user -> UserResponse.convertTo(user)).toList();
+		return service.findByRol(rol).stream().map(user -> UserResponse.convertTo(user)).toList();
 	}
 	
 	@GetMapping("/admin/users")

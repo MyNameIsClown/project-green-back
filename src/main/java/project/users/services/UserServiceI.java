@@ -23,7 +23,7 @@ public interface UserServiceI {
 	public void deleteById(UUID id);
 	public void delete(User user);
 	public Optional<User> findByUsername(String username);
-	public List<User> findByRole(String role);
+	public List<User> findByRol(String role);
 	public Boolean matchesPassword(User user, String clearPassword);
 
 }

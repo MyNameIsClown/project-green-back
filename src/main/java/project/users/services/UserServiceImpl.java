@@ -90,9 +90,8 @@ public class UserServiceImpl implements UserServiceI{
 	}
 
 	@Override
-	public List<User> findByRole(String role) {
-		//return repository.findByRoles(role);
-		return null;
+	public List<User> findByRol(String role) {
+		return repository.findByRol(role == Roles.ADMIN ? 0 : 1);
 	}
 
 	@Override
