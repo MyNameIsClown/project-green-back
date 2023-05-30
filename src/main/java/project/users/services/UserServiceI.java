@@ -1,7 +1,7 @@
 package project.users.services;
 
 import project.users.models.User;
-import project.users.models.UserRoles;
+import project.users.models.Roles;
 import project.users.models.dto.CreateUserRequest;
 
 import java.util.List;
@@ -12,7 +12,8 @@ import java.util.UUID;
 public interface UserServiceI {
 	public Optional<User> findById(UUID id);
 	public List<User> findAll();
-	public User createUser(CreateUserRequest user, Set<UserRoles> roles);
+	public User createUser(CreateUserRequest user, Set<Roles> roles);
+	public User updateUser(User user);
 
 	public Boolean isPresent(UUID id);
 	public User createUserWithUserRole(CreateUserRequest createUserRequest);

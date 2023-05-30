@@ -18,6 +18,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Log
 public class FoodConsumption {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne
     @JoinColumn(name = "food_consumption_id", nullable = false)
     private FoodConsumptionData foodConsumptionData;

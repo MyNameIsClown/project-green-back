@@ -1,4 +1,4 @@
-package project.users.models.dto;
+package project.carbonFootprint.models.dto.carbonFootprintData;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreateUserRequest {
-    private String username, password, verifyPassword, fullName, email;
+public class WasteProductionData {
+    String wasteType;
+    Integer production;
 }

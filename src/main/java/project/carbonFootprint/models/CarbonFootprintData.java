@@ -27,22 +27,22 @@ public class CarbonFootprintData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     @ManyToOne
-    @JoinColumn(name="user", nullable = false)
+    @JoinColumn(name="user_id", nullable = false)
     private User user;
     @Column
     private Date date;
-    @OneToOne(mappedBy = "carbonFootprintData")
+    @OneToOne(mappedBy = "carbonFootprintData", cascade = CascadeType.ALL)
     private TransportationUseData transportationUseData;
-    @OneToOne(mappedBy = "carbonFootprintData")
+    @OneToOne(mappedBy = "carbonFootprintData", cascade = CascadeType.ALL)
     private EnergyConsumptionData energyConsumptionData;
-    @OneToOne(mappedBy = "carbonFootprintData")
+    @OneToOne(mappedBy = "carbonFootprintData", cascade = CascadeType.ALL)
     private FoodConsumptionData foodConsumptionData;
-    @OneToOne(mappedBy = "carbonFootprintData")
+    @OneToOne(mappedBy = "carbonFootprintData", cascade = CascadeType.ALL)
     private WasteProductionData wasteProductionData;
     @Column
-    private Integer co2Emitted;
+    private Double co2Emitted;
     @Column
     private Integer greenScore;
 }

@@ -18,6 +18,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Log
 public class TransportationUse {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne
     @JoinColumn(name = "transportation_use_id")
     private TransportationUseData transportationUseData;

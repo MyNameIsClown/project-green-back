@@ -16,13 +16,12 @@ import project.carbonFootprint.models.CarbonFootprintData;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name="USER")
+@Table(name="USERS")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -66,20 +65,19 @@ public class User implements UserDetails {
 	private boolean enabled = true;
 
 	@Builder.Default
-	@Column(name="carbon_footprint_is_calculated")
+	@Column(name="hasCO2Footprint")
 	private boolean carbonFootprintIsCalculated = false;
 
-	@OneToMany(mappedBy = "user")
-	private List<CarbonFootprintData> carbonFootprintData;
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<CarbonFootprintData> carbonFootprintData;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(
-			name = "user-roles",
+			name = "user_roles",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id")
 	)
-	@Column(name="roles")
-	private Set<UserRoles> roles;
+	private Set<Roles> roles;
 
 	@CreatedDate
 	@Column(name="created_at")
@@ -89,11 +87,10 @@ public class User implements UserDetails {
 	@Column(name="last_password_change_at")
 	private LocalDateTime lastPasswordChangeAt = LocalDateTime.now();
 
-
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return roles.stream()
-				.map(role -> "ROLE_" + role.getRole())
+				.map(role -> "ROLE_" + role.getRoleName())
 				.map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toList());
 	}

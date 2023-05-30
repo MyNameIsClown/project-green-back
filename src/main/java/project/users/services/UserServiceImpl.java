@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.users.models.User;
-import project.users.models.UserRoles;
+import project.users.models.Roles;
 import project.users.models.dto.CreateUserRequest;
 import project.users.repo.UserRepository;
 
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserServiceI{
 	}
 
 	@Override
-	public User createUser(CreateUserRequest createUserRequest, Set<UserRoles> roles){
+	public User createUser(CreateUserRequest createUserRequest, Set<Roles> roles){
 		User user = User.builder()
 				.username(createUserRequest.getUsername())
 				.password(passwordEncoder.encode(createUserRequest.getPassword()))
@@ -42,11 +42,16 @@ public class UserServiceImpl implements UserServiceI{
 		return repository.save(user);
 	}
 
+	@Override
+	public User updateUser(User user) {
+		return repository.save(user);
+	}
+
 	public User createUserWithUserRole(CreateUserRequest createUserRequest){
-		return createUser(createUserRequest, Set.of(new UserRoles(UserRoles.USER)));
+		return createUser(createUserRequest, Set.of(new Roles(Roles.USER)));
 	}
 	public User createUserWithAdminRole(CreateUserRequest createUserRequest){
-		return createUser(createUserRequest, Set.of(new UserRoles(UserRoles.ADMIN)));
+		return createUser(createUserRequest, Set.of(new Roles(Roles.ADMIN)));
 	}
 
 	@Override
@@ -86,7 +91,8 @@ public class UserServiceImpl implements UserServiceI{
 
 	@Override
 	public List<User> findByRole(String role) {
-		return repository.findByRoles(role);
+		//return repository.findByRoles(role);
+		return null;
 	}
 
 	@Override

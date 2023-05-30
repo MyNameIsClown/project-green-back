@@ -18,6 +18,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Log
 public class EnergyConsumption {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne
     @JoinColumn(name = "energy_consumption_id", nullable = false)
     private EnergyConsumptionData energyConsumptionData;

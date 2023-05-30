@@ -14,6 +14,7 @@ public class JwtUserResponse extends UserResponse{
         username = userResponse.getUsername();
         fullname = userResponse.getFullname();
         email = userResponse.getEmail();
+        carbonFootprintIsCalculated = userResponse.isCarbonFootprintIsCalculated();
     }
     public static JwtUserResponse of (User user, String token){
         JwtUserResponse result =  new JwtUserResponse(convertTo(user));
