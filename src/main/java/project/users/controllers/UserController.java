@@ -1,6 +1,7 @@
 package project.users.controllers;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import project.security.jwt.service.JwtService;
-import project.users.models.Role;
+import project.users.models.Roles;
 import project.users.models.User;
 import project.users.models.dto.*;
 import project.users.services.RoleServiceI;
@@ -24,6 +25,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@Log
 public class UserController {
 	@Autowired
 	private final UserServiceI service;
@@ -63,7 +65,7 @@ public class UserController {
 
 	@PostMapping("/users/createRoles")
 	@ResponseBody
-	public ResponseEntity<Role> createRoles(@RequestBody List<Role> roles) {
+	public ResponseEntity<Roles> createRoles(@RequestBody List<Roles> roles) {
 		serviceRole.createRoles(roles);
 		return ResponseEntity.status(HttpStatus.CREATED).body(null);
 	}
@@ -99,8 +101,7 @@ public class UserController {
 
 	@PutMapping("/users/changePassword")
 	@ResponseBody
-	public ResponseEntity<UserResponse> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest,
-													   @AuthenticationPrincipal User userLogged){
+	public ResponseEntity<UserResponse> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest, @AuthenticationPrincipal User userLogged){
 		try{
 			SecurityContextHolder.getContext().getAuthentication();
 			if(service.matchesPassword(userLogged, changePasswordRequest.getOldPassword())
@@ -116,6 +117,12 @@ public class UserController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password Data Error");
 		}
 		return null;
+	}
+
+	@GetMapping("/users/currentUser")
+	@ResponseBody
+	public ResponseEntity<UserResponse> getCurrentUser(@AuthenticationPrincipal User userLogged){
+		return ResponseEntity.ok(UserResponse.convertTo(userLogged));
 	}
 	
 }

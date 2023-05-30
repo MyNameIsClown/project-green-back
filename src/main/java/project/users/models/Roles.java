@@ -14,25 +14,25 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserRoles {
+public class Roles {
     public static final String ADMIN = "ADMIN";
     public static final String USER = "USER";
     private static final long serialVersionUID = 1L;
     @Id
-    @Column(name="id")
-    private int id;
-    @Column(name="role", unique = true, updatable = false, nullable = false)
-    private String role;
+    @Column(name="role_id")
+    private Integer roleId;
+    @Column(name="role_name", unique = true, updatable = false, nullable = false)
+    private String roleName;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
     Set<User> users;
 
-    public UserRoles(String role){
+    public Roles(String role){
         if(role.equals(this.ADMIN)){
-            this.id = 0;
+            this.roleId = 0;
         }else{
-            this.id = 1;
+            this.roleId = 1;
         }
-        this.role = role;
+        this.roleName = role;
     }
 }

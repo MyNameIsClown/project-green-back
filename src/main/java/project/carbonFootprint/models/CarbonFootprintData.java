@@ -29,7 +29,7 @@ public class CarbonFootprintData {
     @Column(name = "id")
     private Long id;
     @ManyToOne
-    @JoinColumn(name="user", nullable = false)
+    @JoinColumn(name="user_id", nullable = false)
     private User user;
     @Column
     private Date date;

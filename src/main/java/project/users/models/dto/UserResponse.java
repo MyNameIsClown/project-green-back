@@ -12,12 +12,14 @@ import project.users.models.User;
 @Builder
 public class UserResponse {
     protected String username, email, fullname;
+    protected boolean carbonFootprintIsCalculated;
 
     public static UserResponse convertTo(User user){
         return UserResponse.builder()
                 .username(user.getUsername())
                 .fullname(user.getFullName())
                 .email(user.getEmail())
+                .carbonFootprintIsCalculated(user.isCarbonFootprintIsCalculated())
                 .build();
     }
 }

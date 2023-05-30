@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CreateUserRequest {
-    private String username, password, verifyPassword, avatar, fullName, email;
+    private String username, password, verifyPassword, fullName, email;
 }

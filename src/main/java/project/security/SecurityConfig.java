@@ -15,7 +15,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
-import project.users.models.UserRoles;
 import project.security.error.JwtAccessDeniedHandler;
 import project.security.error.JwtAuthenticationEntryPoint;
 import project.security.jwt.service.JwtAuthenticationFilter;
@@ -68,7 +67,7 @@ public class SecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/users/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/carbonFootprint/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/api/admin/**")).hasRole(UserRoles.ADMIN)
+                        .requestMatchers(new AntPathRequestMatcher("/api/admin/**")).permitAll()
                         .anyRequest().authenticated()
                 );
 

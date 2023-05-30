@@ -12,9 +12,11 @@ import project.carbonFootprint.models.dto.CalculationRequest;
 import project.carbonFootprint.models.dto.CalculationResponse;
 import project.carbonFootprint.repo.TransportationUseDataRepository;
 import project.carbonFootprint.services.CarbonFootprintCalculationI;
+import project.carbonFootprint.services.CarbonFootprintDataServiceI;
 import project.security.jwt.service.JwtService;
 import project.users.models.User;
 import project.users.models.dto.UserResponse;
+import project.users.services.UserServiceI;
 
 @RestController
 @RequestMapping("/api/carbonFootprint")
@@ -26,14 +28,23 @@ public class CarbonFootprintCalcController {
     @Autowired
     private final JwtService jwtService;
     @Autowired
-    private final CarbonFootprintCalculationI carbonFootprintDataService;
+    private final CarbonFootprintCalculationI carbonFootprintCalculationService;
+
+    @Autowired
+    private final CarbonFootprintDataServiceI carbonFootprintDataServiceI;
+
+    @Autowired
+    private final UserServiceI userService;
+
     @Autowired
     private final TransportationUseDataRepository transportationUseDataRepository;
 
     @PostMapping("/calculation")
     @ResponseBody
-    public ResponseEntity<CalculationResponse> createUserWithUserRole(@RequestBody CalculationRequest calculationRequest, @AuthenticationPrincipal User userLogged) {
-        CarbonFootprintData carbonFootprintData = carbonFootprintDataService.calculate(calculationRequest, userLogged);
+    public ResponseEntity<CalculationResponse> calculateCarbonFootprintData(@RequestBody CalculationRequest calculationRequest, @AuthenticationPrincipal User userLogged) {
+        userLogged.setCarbonFootprintIsCalculated(true);
+        userLogged = userService.updateUser(userLogged);
+        CarbonFootprintData carbonFootprintData = carbonFootprintCalculationService.calculate(calculationRequest, userLogged);
         CalculationResponse response = CalculationResponse.builder()
                 .user(UserResponse.convertTo(userLogged))
                 .totalCo2Emitted(carbonFootprintData.getCo2Emitted())
@@ -42,5 +53,23 @@ public class CarbonFootprintCalcController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    @GetMapping("/homePageInfo")
+    @ResponseBody
+    public ResponseEntity<CalculationResponse> getHomePageInfo(@AuthenticationPrincipal User userLogged) {
+        userLogged.setCarbonFootprintIsCalculated(true);
+        userLogged = userService.updateUser(userLogged);
+
+
+        CarbonFootprintData carbonFootprintData = carbonFootprintDataServiceI.getOfUserLogged(userLogged);
+        CalculationResponse response = CalculationResponse.builder()
+                .user(UserResponse.convertTo(userLogged))
+                .totalCo2Emitted(carbonFootprintData.getCo2Emitted())
+                .totalGreenScore(carbonFootprintData.getGreenScore())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
 }
 
