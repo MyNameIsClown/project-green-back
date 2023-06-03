@@ -26,10 +26,14 @@ public class TransportationUse {
     private TransportationUseData transportationUseData;
     @Column
     private String transportationName;
+    /**
+     * Tipo de vehiculo
+     */
     @Column
     private String vehicleType;
-    @Column
-    private Integer timeIntervalInDays;
+    /**
+     * Cantidad de kilometos anuales
+     */
     @Column
     private Integer distanceTravelInKm;
 }

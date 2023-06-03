@@ -39,7 +39,6 @@ public class TransportationUseData {
         for(project.carbonFootprint.models.dto.carbonFootprintData.TransportationUseData t: transportationUseData){
             transportationUsesList.add(TransportationUse.builder()
                     .vehicleType(t.getVehicleType())
-                    .timeIntervalInDays(t.getTimeIntervalInDays())
                     .transportationName(t.getTransportName())
                     .distanceTravelInKm(t.getDistanceTravelInKm())
                             .transportationUseData(response)
