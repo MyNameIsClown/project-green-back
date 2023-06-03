@@ -42,7 +42,6 @@ public class EnergyConsumptionData {
                             .energyConsumptionData(response)
                             .energyType(data.getEnergyType())
                             .consume(data.getConsume())
-                            .timeIntervalInDays(data.getTimeIntervalInDays())
                     .build());
         }
         response.setEnergyConsumptions(energyConsumptionList);

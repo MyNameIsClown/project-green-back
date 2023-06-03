@@ -20,16 +20,11 @@ public class EnergyConsumption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne
     @JoinColumn(name = "energy_consumption_id", nullable = false)
     private EnergyConsumptionData energyConsumptionData;
     @Column
     private String energyType;
-
-    @Column
-    private Integer timeIntervalInDays;
-
     @Column
     private Integer consume;
 }

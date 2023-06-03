@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class EnergyConsumptionData {
     String energyType;
-    Integer timeIntervalInDays, consume;
+    Integer consume;
 }

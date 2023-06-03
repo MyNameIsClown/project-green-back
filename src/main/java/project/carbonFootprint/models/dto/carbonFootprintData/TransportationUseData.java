@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TransportationUseData {
     String transportName, vehicleType;
-    Integer timeIntervalInDays, distanceTravelInKm;
+    Integer distanceTravelInKm;
 }
