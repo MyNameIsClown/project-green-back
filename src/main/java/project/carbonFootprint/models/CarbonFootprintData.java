@@ -1,7 +1,10 @@
 package project.carbonFootprint.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import project.carbonFootprint.models.energy.EnergyConsumptionData;
@@ -10,7 +13,7 @@ import project.carbonFootprint.models.transportation.TransportationUseData;
 import project.carbonFootprint.models.waste.WasteProductionData;
 import project.users.models.User;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name="CARBON_FOOTPRINT_DATA")
@@ -29,7 +32,8 @@ public class CarbonFootprintData {
     @JoinColumn(name="user_id", nullable = false)
     private User user;
     @Column
-    private Date date;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp date;
     @OneToOne(mappedBy = "carbonFootprintData", cascade = CascadeType.ALL)
     private TransportationUseData transportationUseData;
     @OneToOne(mappedBy = "carbonFootprintData", cascade = CascadeType.ALL)

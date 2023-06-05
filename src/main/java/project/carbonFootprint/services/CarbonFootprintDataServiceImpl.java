@@ -8,6 +8,8 @@ import project.carbonFootprint.models.CarbonFootprintData;
 import project.carbonFootprint.repo.CarbonFootprintDataRepository;
 import project.users.models.User;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CarbonFootprintDataServiceImpl implements CarbonFootprintDataServiceI{
@@ -20,11 +22,15 @@ public class CarbonFootprintDataServiceImpl implements CarbonFootprintDataServic
 
     @Override
     public CarbonFootprintData get(Long id) {
-        return repository.getReferenceById(id);
+        return repository.findById(id).orElse(null);
     }
 
     @Override
     public CarbonFootprintData getOfUserLogged(User user) {
         return repository.findFirstByUser(user, Sort.by("id").descending());
+    }
+
+    public List<CarbonFootprintData> getAllOfUserLogged (User user){
+        return repository.findAllByUser(user, Sort.by("date").descending());
     }
 }
