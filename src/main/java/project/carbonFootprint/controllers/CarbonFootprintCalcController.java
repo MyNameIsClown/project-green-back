@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import project.carbonFootprint.models.CarbonFootprintData;
 import project.carbonFootprint.models.dto.CalculationRequest;
 import project.carbonFootprint.models.dto.CalculationResponse;
+import project.carbonFootprint.models.dto.CarbonFootprintDetail;
+import project.carbonFootprint.models.dto.CarbonFootprintShort;
 import project.carbonFootprint.repo.TransportationUseDataRepository;
 import project.carbonFootprint.services.CarbonFootprintCalculationI;
 import project.carbonFootprint.services.CarbonFootprintDataServiceI;
@@ -17,6 +19,9 @@ import project.security.jwt.service.JwtService;
 import project.users.models.User;
 import project.users.models.dto.UserResponse;
 import project.users.services.UserServiceI;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/carbonFootprint")
@@ -67,6 +72,23 @@ public class CarbonFootprintCalcController {
                 .totalCo2Emitted(carbonFootprintData.getCo2Emitted())
                 .totalGreenScore(carbonFootprintData.getGreenScore())
                 .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/getAll")
+    @ResponseBody
+    public ResponseEntity<List<CarbonFootprintShort>> getAllShort(@AuthenticationPrincipal User userLogged){
+        List<CarbonFootprintShort> response = carbonFootprintDataServiceI.getAllOfUserLogged(userLogged).stream().map(
+                        (data) -> CarbonFootprintShort.of(data)
+                ).collect(Collectors.toList()
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/getById/{id}")
+    @ResponseBody
+    public ResponseEntity<CarbonFootprintDetail> getAllShort(@PathVariable("id") Long id){
+        CarbonFootprintDetail response = CarbonFootprintDetail.of(carbonFootprintDataServiceI.get(id));
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
