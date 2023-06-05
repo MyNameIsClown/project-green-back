@@ -12,8 +12,8 @@ import project.carbonFootprint.models.waste.WasteProductionData;
 import project.carbonFootprint.repo.CarbonFooprintCalcParameterRepository;
 import project.users.models.User;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -124,7 +124,7 @@ public class CarbonFootprintCalculationImpl implements CarbonFootprintCalculatio
 
         CARBON_FOOTPRINT_DATA = carbonFootprintDataService.save(CarbonFootprintData.builder()
                 .user(currentUser)
-                .date(Date.valueOf(LocalDate.now()))
+                .date(Timestamp.valueOf(LocalDateTime.now()))
                 .build());
 
         TransportationUseData transportationUseData = calculateTransportEmisions(calculationRequest.getTransportationUseData());

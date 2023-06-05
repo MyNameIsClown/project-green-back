@@ -26,7 +26,7 @@ public class WasteProductionData {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "carbon_footprint_id", nullable = false, referencedColumnName = "id")
     private CarbonFootprintData carbonFootprintData;
-    @OneToMany(mappedBy = "wasteProductionData", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "wasteProductionData", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<WasteProduction> wasteProductions;
     @Column
     private Double co2Emitted;
