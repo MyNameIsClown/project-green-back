@@ -13,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import project.carbonFootprint.models.CarbonFootprintData;
+import project.groups.models.Membership;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -78,6 +79,8 @@ public class User implements UserDetails {
 			inverseJoinColumns = @JoinColumn(name = "role_id")
 	)
 	private Set<Roles> roles;
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Membership> memberships;
 
 	@CreatedDate
 	@Column(name="created_at")

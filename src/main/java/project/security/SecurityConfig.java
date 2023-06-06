@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import project.security.error.JwtAccessDeniedHandler;
 import project.security.error.JwtAuthenticationEntryPoint;
 import project.security.jwt.service.JwtAuthenticationFilter;
+import project.users.models.Roles;
 
 import java.util.List;
 
@@ -67,7 +68,8 @@ public class SecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/users/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/carbonFootprint/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/api/admin/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/groups/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/admin/**")).hasRole(Roles.ADMIN)
                         .anyRequest().authenticated()
                 );
 
