@@ -12,6 +12,6 @@ import project.users.models.dto.UserResponse;
 @Builder
 public class CalculationResponse {
     UserResponse user;
-    Double totalCo2Emitted;
+    Integer totalCo2Emitted;
     Integer totalGreenScore;
 }

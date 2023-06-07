@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class WasteData {
     private Long id;
     private List<WasteProductionData> wasteProductionData;
-    private Double co2Emitted;
+    private Integer co2Emitted;
     private Integer greenScore;
 
     public static WasteData of (project.carbonFootprint.models.waste.WasteProductionData wasteData){

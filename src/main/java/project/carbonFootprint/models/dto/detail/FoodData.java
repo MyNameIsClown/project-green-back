@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class FoodData {
     private Long id;
     private List<FoodConsumptionData> foodConsumptionData;
-    private Double co2Emitted;
+    private Integer co2Emitted;
     private Integer greenScore;
 
     public static FoodData of (project.carbonFootprint.models.food.FoodConsumptionData foodData){

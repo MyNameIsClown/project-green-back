@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class CarbonFootprintDetail {
     Long id;
-    Double co2Emitted;
+    Integer co2Emitted;
     Timestamp date;
     Integer greenScore;
     TransportationData transportationData;

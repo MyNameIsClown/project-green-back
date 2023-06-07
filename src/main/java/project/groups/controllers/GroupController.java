@@ -11,6 +11,7 @@ import project.groups.models.GroupRoleTypes;
 import project.groups.models.Membership;
 import project.groups.models.MembershipKey;
 import project.groups.models.dto.CreateGroupRequest;
+import project.groups.models.dto.GroupDetailResponse;
 import project.groups.services.GroupServiceI;
 import project.groups.services.MembershipServiceI;
 import project.users.models.User;
@@ -49,10 +50,15 @@ public class GroupController {
 
     @PostMapping("/groups/suscribe/{id}")
     @ResponseBody
-    public ResponseEntity<Object> createGroup (@PathVariable("id") Long groupId, @AuthenticationPrincipal User userLogged){
+    public ResponseEntity<Object> suscribe (@PathVariable("id") Long groupId, @AuthenticationPrincipal User userLogged){
         Optional<Group> response = groupServiceI.getById(groupId);
+
         Membership membership;
         try{
+            if(membershipServiceI.existMembershipOf(response.get(), userLogged)){
+                return ResponseEntity.badRequest().body("The user is subscribe");
+            }
+
              membership = membershipServiceI.suscribe(Membership.builder()
                     .id(MembershipKey.builder().build())
                     .group(response.get())
@@ -69,10 +75,20 @@ public class GroupController {
 
     @GetMapping("/groups")
     @ResponseBody
-    public List<CreateGroupRequest> getUsers() {
+    public List<CreateGroupRequest> getAll() {
         return groupServiceI.getAll().stream()
                 .map(group -> CreateGroupRequest.of(group))
                 .toList();
+    }
+
+    @GetMapping("/groups/{id}")
+    @ResponseBody
+    public ResponseEntity<GroupDetailResponse> getOne(@PathVariable("id") Long id) {
+        Optional<Group> groupResponse = groupServiceI.getById(id);
+        GroupDetailResponse response = null;
+            List<Membership> members = membershipServiceI.getMembersOf(groupResponse.get());
+            response = GroupDetailResponse.of(groupResponse.get(), members);
+        return ResponseEntity.ok(response);
     }
 
 

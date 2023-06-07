@@ -29,7 +29,7 @@ public class TransportationUseData {
     @OneToMany(mappedBy = "transportationUseData", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<TransportationUse> transportationUses;
     @Column
-    private Double co2Emitted;
+    private Integer co2Emitted;
     @Column
     private Integer greenScore;
 

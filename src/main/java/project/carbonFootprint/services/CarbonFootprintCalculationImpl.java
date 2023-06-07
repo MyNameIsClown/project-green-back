@@ -37,18 +37,18 @@ public class CarbonFootprintCalculationImpl implements CarbonFootprintCalculatio
         TransportationUseData response = TransportationUseData.of(transportationUseData);
         response.setCarbonFootprintData(CARBON_FOOTPRINT_DATA);
 
-        AtomicReference<Double> totalCo2Emitted = new AtomicReference<>(0d);
+        AtomicReference<Integer> totalCo2Emitted = new AtomicReference<>(0);
 
         response.getTransportationUses().forEach((transport)->{
             String vehicleType = transport.getVehicleType();
             CarbonFootprintCalcParameter calculationParameter = calculationParameterRepo.findByName(vehicleType);
-            Double emission;
+            Integer emission;
             if(CarbonFootprintCalcParameter.isUnipersonalTransport(vehicleType)){
-                emission = (transport.getDistanceTravelInKm()/calculationParameter.getEfficiencyFactor())*calculationParameter.getCo2Factor();
+                emission = (int) ((transport.getDistanceTravelInKm()/calculationParameter.getEfficiencyFactor())*calculationParameter.getCo2Factor());
             }else if(CarbonFootprintCalcParameter.isLongTravelTransport(vehicleType) || CarbonFootprintCalcParameter.isPublicTransport(vehicleType)){
-                emission = transport.getDistanceTravelInKm()*calculationParameter.getCo2Factor();
+                emission = (int) (transport.getDistanceTravelInKm()*calculationParameter.getCo2Factor());
             } else {
-                emission = 0d;
+                emission = 0;
             }
 
             totalCo2Emitted.updateAndGet(v -> v + emission);
@@ -63,12 +63,12 @@ public class CarbonFootprintCalculationImpl implements CarbonFootprintCalculatio
         EnergyConsumptionData response = EnergyConsumptionData.of(energyConsumptionData);
         response.setCarbonFootprintData(CARBON_FOOTPRINT_DATA);
 
-        AtomicReference<Double> totalCo2Emitted = new AtomicReference<>(0d);
+        AtomicReference<Integer> totalCo2Emitted = new AtomicReference<>(0);
 
         response.getEnergyConsumptions().forEach((energy)->{
             String energyType = energy.getEnergyType();
             CarbonFootprintCalcParameter calculationParameter = calculationParameterRepo.findByName(energyType);
-            Double emission = energy.getConsume()*calculationParameter.getCo2Factor();
+            Integer emission = (int) (energy.getConsume()*calculationParameter.getCo2Factor());
             totalCo2Emitted.updateAndGet(v -> v + emission);
         });
 
@@ -82,7 +82,7 @@ public class CarbonFootprintCalculationImpl implements CarbonFootprintCalculatio
         FoodConsumptionData response = FoodConsumptionData.of(foodConsumptionData);
         response.setCarbonFootprintData(CARBON_FOOTPRINT_DATA);
 
-        AtomicReference<Double> totalCo2Emitted = new AtomicReference<>(0d);
+        AtomicReference<Integer> totalCo2Emitted = new AtomicReference<>(0);
 
         response.getFoodConsumptions().forEach((food)->{
             String foodType = food.getFoodType();
@@ -92,7 +92,7 @@ public class CarbonFootprintCalculationImpl implements CarbonFootprintCalculatio
             Double averageMilkWeightInKgsPerConsumption = 0.25d;
             Double averageCalculationData = foodType == "meat" ? averageMeatWeightInKgsPerConsumption : averageMilkWeightInKgsPerConsumption;
 
-            Double emission = food.getConsume()*averageCalculationData*calculationParameter.getCo2Factor();
+            Integer emission = (int) (food.getConsume()*averageCalculationData*calculationParameter.getCo2Factor());
             totalCo2Emitted.updateAndGet(v -> v + emission);
         });
 
@@ -106,12 +106,12 @@ public class CarbonFootprintCalculationImpl implements CarbonFootprintCalculatio
         WasteProductionData response = WasteProductionData.of(wasteProductionData);
         response.setCarbonFootprintData(CARBON_FOOTPRINT_DATA);
 
-        AtomicReference<Double> totalCo2Emitted = new AtomicReference<>(0d);
+        AtomicReference<Integer> totalCo2Emitted = new AtomicReference<>(0);
 
         response.getWasteProductions().forEach((waste)->{
             String energyType = waste.getWasteType();
             CarbonFootprintCalcParameter calculationParameter = calculationParameterRepo.findByName(energyType);
-            Double emission = waste.getConsume()*calculationParameter.getCo2Factor();
+            Integer emission = (int) (waste.getConsume()*calculationParameter.getCo2Factor());
             totalCo2Emitted.updateAndGet(v -> v + emission);
         });
 
@@ -132,7 +132,7 @@ public class CarbonFootprintCalculationImpl implements CarbonFootprintCalculatio
         FoodConsumptionData foodConsumptionData = calculateFoodEmisions(calculationRequest.getFoodConsumptionData());
         WasteProductionData wasteProductionData = calculateWasteEmisions(calculationRequest.getWasteProductionData());
 
-        Double emissions = transportationUseData.getCo2Emitted() + energyConsumptionData.getCo2Emitted() + foodConsumptionData.getCo2Emitted() + wasteProductionData.getCo2Emitted();
+        Integer emissions = (int) (transportationUseData.getCo2Emitted() + energyConsumptionData.getCo2Emitted() + foodConsumptionData.getCo2Emitted() + wasteProductionData.getCo2Emitted());
         Integer totalGreenScore = (transportationUseData.getGreenScore()*2 + energyConsumptionData.getGreenScore()*3 + foodConsumptionData.getGreenScore()*1 + wasteProductionData.getGreenScore()*1)/7;
 
         CARBON_FOOTPRINT_DATA.setCo2Emitted(emissions);

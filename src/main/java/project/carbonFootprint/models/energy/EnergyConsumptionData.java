@@ -29,7 +29,7 @@ public class EnergyConsumptionData {
     @OneToMany(mappedBy = "energyConsumptionData", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<EnergyConsumption> energyConsumptions;
     @Column
-    private Double co2Emitted;
+    private Integer co2Emitted;
 
     @Column
     private Integer greenScore;
