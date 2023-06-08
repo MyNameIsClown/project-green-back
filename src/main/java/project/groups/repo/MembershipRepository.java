@@ -13,5 +13,6 @@ import java.util.List;
 @Repository
 public interface MembershipRepository extends JpaRepository<Membership, MembershipKey> {
     List<Membership> findByGroup(Group group);
+    List<Membership> findByUser(User user);
     boolean existsByGroupAndUser(Group group, User user);
 }

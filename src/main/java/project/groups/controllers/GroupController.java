@@ -15,6 +15,8 @@ import project.groups.models.dto.GroupDetailResponse;
 import project.groups.services.GroupServiceI;
 import project.groups.services.MembershipServiceI;
 import project.users.models.User;
+import project.users.models.dto.UserResponse;
+import project.users.services.UserServiceI;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,10 +31,17 @@ public class GroupController {
     private GroupServiceI groupServiceI;
     @Autowired
     private MembershipServiceI membershipServiceI;
+    @Autowired
+    private UserServiceI userServiceI;
 
     @PostMapping("/admin/createGroup")
     @ResponseBody
     public ResponseEntity<Object> createGroup (@RequestBody CreateGroupRequest createGroupRequest, @AuthenticationPrincipal User userLogged){
+        if(userLogged.getHaveAGroup()){
+            return ResponseEntity.badRequest().body("The current user already has a group created");
+        }
+        userLogged.setHaveAGroup(true);
+        userServiceI.updateUser(userLogged);
         Group response = groupServiceI.createGroup(Group.of(createGroupRequest));
         try {
             membershipServiceI.suscribe(Membership.builder()
@@ -89,6 +98,34 @@ public class GroupController {
             List<Membership> members = membershipServiceI.getMembersOf(groupResponse.get());
             response = GroupDetailResponse.of(groupResponse.get(), members);
         return ResponseEntity.ok(response);
+    }
+    @GetMapping("/groups/getOwner/{id}")
+    @ResponseBody
+    public ResponseEntity<Object> getOwnership(@PathVariable("id") Long id) {
+        Group group = groupServiceI.getById(id).orElse(null);
+        User owner = membershipServiceI.getOwner(group);
+        if(group==null || owner == null || owner.getUsername() == null){
+            return ResponseEntity.badRequest().body("The id group does not exists");
+        }
+        return ResponseEntity.ok(UserResponse.convertTo(owner));
+    }
+    @GetMapping("/groups/isMine/{id}")
+    @ResponseBody
+    public ResponseEntity<Object> isMine(@PathVariable("id") Long id, @AuthenticationPrincipal User userLogged) {
+        Group group = groupServiceI.getById(id).orElse(null);
+        if(group==null){
+            return ResponseEntity.badRequest().body("The id group does not exists");
+        }
+        return ResponseEntity.ok(membershipServiceI.getOwner(group).equals(userLogged));
+    }
+    @GetMapping("/groups/getOwn")
+    @ResponseBody
+    public ResponseEntity<Object> isMine(@AuthenticationPrincipal User userLogged) {
+        Group group = membershipServiceI.getOwn(userLogged);
+        if(group == null){
+            return ResponseEntity.badRequest().body("The user does not own any group");
+        }
+        return ResponseEntity.ok(GroupDetailResponse.of(group));
     }
 
 

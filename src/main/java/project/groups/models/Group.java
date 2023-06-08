@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import project.activities.model.Activity;
 import project.groups.models.dto.CreateGroupRequest;
 
 import java.util.Set;
@@ -32,6 +33,8 @@ public class Group {
     private String locationName;
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Membership> memberships;
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Activity> activities;
 
     public static Group of(CreateGroupRequest createGroupRequest){
         return Group.builder()

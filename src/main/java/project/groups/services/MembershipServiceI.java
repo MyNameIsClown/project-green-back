@@ -10,4 +10,6 @@ public interface MembershipServiceI {
     Membership suscribe(Membership membership);
     List<Membership> getMembersOf(Group group);
     boolean existMembershipOf(Group group, User user);
+    User getOwner(Group group);
+    Group getOwn(User user);
 }

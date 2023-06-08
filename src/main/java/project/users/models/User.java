@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import project.activities.model.Invitation;
 import project.carbonFootprint.models.CarbonFootprintData;
 import project.groups.models.Membership;
 
@@ -60,18 +61,17 @@ public class User implements UserDetails {
 	@Builder.Default
 	@Column(name="credentials_non_expired")
 	private boolean credentialsNonExpired = true;
-
 	@Builder.Default
 	@Column(name="enabled")
 	private boolean enabled = true;
-
 	@Builder.Default
 	@Column(name="hasCO2Footprint")
 	private boolean carbonFootprintIsCalculated = false;
-
+	@Builder.Default
+	@Column(name="haveAGroup")
+	private Boolean haveAGroup = false;
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<CarbonFootprintData> carbonFootprintData;
-
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "user_roles",
@@ -81,7 +81,8 @@ public class User implements UserDetails {
 	private Set<Roles> roles;
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Membership> memberships;
-
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Invitation> invitations;
 	@CreatedDate
 	@Column(name="created_at")
 	private LocalDateTime createdAt;

@@ -12,7 +12,7 @@ import project.users.models.User;
 @Builder
 public class UserResponse {
     protected String username, email, fullname;
-    protected boolean carbonFootprintIsCalculated;
+    protected boolean carbonFootprintIsCalculated, hasGroup;
 
     public static UserResponse convertTo(User user){
         return UserResponse.builder()
@@ -20,6 +20,7 @@ public class UserResponse {
                 .fullname(user.getFullName())
                 .email(user.getEmail())
                 .carbonFootprintIsCalculated(user.isCarbonFootprintIsCalculated())
+                .hasGroup(user.getHaveAGroup())
                 .build();
     }
 }
