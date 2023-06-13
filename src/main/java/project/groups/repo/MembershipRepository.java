@@ -8,11 +8,13 @@ import project.groups.models.MembershipKey;
 import project.users.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
 public interface MembershipRepository extends JpaRepository<Membership, MembershipKey> {
     List<Membership> findByGroup(Group group);
     List<Membership> findByUser(User user);
+    Optional<Membership> findByGroupAndUser(Group group, User user);
     boolean existsByGroupAndUser(Group group, User user);
 }

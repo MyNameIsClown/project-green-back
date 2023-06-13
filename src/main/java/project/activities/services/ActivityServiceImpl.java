@@ -35,7 +35,12 @@ public class ActivityServiceImpl implements ActivityServiceI{
     }
 
     @Override
-    public List<Activity> getAllPublic() {
-        return repository.findAll().stream().filter((activity -> activity.isPrivate()==false)).collect(Collectors.toList());
+    public List<Activity> getAllPublic(Group group) {
+        return repository.findByGroup(group).stream().filter((activity -> activity.isPrivate()==false)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Activity save(Activity activity) {
+        return repository.save(activity);
     }
 }

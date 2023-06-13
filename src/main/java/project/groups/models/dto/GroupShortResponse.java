@@ -8,11 +8,15 @@ import project.groups.models.Group;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-public class CreateGroupRequest {
+public class GroupShortResponse {
+    Long id;
     String name, description, locationName;
 
-    public static CreateGroupRequest of(Group group){
-        return CreateGroupRequest.builder()
+    Boolean currentUserIsRegistrated;
+
+    public static GroupShortResponse of(Group group){
+        return GroupShortResponse.builder()
+                .id(group.getId())
                 .name(group.getName())
                 .description(group.getDescription())
                 .locationName(group.getLocationName())

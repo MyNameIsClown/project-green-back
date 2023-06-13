@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import project.activities.model.dto.ActivityShortResponse;
 import project.groups.models.Group;
 import project.groups.models.Membership;
 
@@ -14,8 +15,9 @@ import java.util.stream.Collectors;
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class GroupDetailResponse extends CreateGroupRequest{
+public class GroupDetailResponse extends GroupShortResponse{
     List<MemberResponse> members;
+    List<ActivityShortResponse> activities;
 
     public static GroupDetailResponse of(Group group, List<Membership> members){
         return GroupDetailResponse.builder()

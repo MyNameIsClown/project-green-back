@@ -25,7 +25,7 @@ public class Activity {
     private String description;
     private String type;
     private String locationName;
-    @OneToMany(mappedBy = "activity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "activity", fetch = FetchType.LAZY)
     private Set<Invitation> invitations;
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)

@@ -14,15 +14,15 @@ import java.time.LocalDateTime;
 @Builder
 public class ActivityShortResponse {
     Long id;
-    String name, type, locationName;
+    String name;
     LocalDateTime celebrationDate;
+    Boolean privacity;
 
     public static ActivityShortResponse of(Activity activity){
         return ActivityShortResponse.builder()
                 .id(activity.getId())
                 .name(activity.getTitle())
-                .type(activity.getType())
-                .locationName(activity.getLocationName())
+                .privacity(activity.isPrivate())
                 .celebrationDate(activity.getCelebrationDate())
                 .build();
     }

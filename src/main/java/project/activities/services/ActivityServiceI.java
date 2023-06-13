@@ -11,5 +11,6 @@ public interface ActivityServiceI {
     Optional<Activity> getOne(Long id);
     List<Activity> getAllByGroup(Group group);
     Activity createActivity(ActivityCreationRequest creationRequest, Group group);
-    List<Activity> getAllPublic();
+    List<Activity> getAllPublic(Group group);
+    Activity save(Activity activity);
 }

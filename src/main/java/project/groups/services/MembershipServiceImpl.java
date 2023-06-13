@@ -2,6 +2,8 @@ package project.groups.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import project.activities.model.Invitation;
+import project.activities.services.InvitationServiceI;
 import project.groups.models.Group;
 import project.groups.models.GroupRoleTypes;
 import project.groups.models.Membership;
@@ -16,10 +18,22 @@ public class MembershipServiceImpl implements MembershipServiceI{
 
     @Autowired
     private MembershipRepository repository;
+    @Autowired
+    private InvitationServiceI invitationServiceI;
 
     @Override
     public Membership suscribe(Membership membership) {
         return repository.save(membership);
+    }
+
+    @Override
+    public void unsubscribe(Membership membership) {
+        repository.delete(membership);
+    }
+
+    @Override
+    public Optional<Membership> getOne(Group group, User user) {
+        return repository.findByGroupAndUser(group, user);
     }
 
     @Override
@@ -30,6 +44,12 @@ public class MembershipServiceImpl implements MembershipServiceI{
     @Override
     public boolean existMembershipOf(Group group, User user) {
         return repository.existsByGroupAndUser(group, user);
+    }
+    @Override
+    public void unsubscribe(Group group, User user) {
+        List<Invitation> invitations = invitationServiceI.getAllByUser(user);
+        invitationServiceI.deleteAll(invitations);
+        repository.delete(repository.findByGroupAndUser(group, user).get());
     }
 
     @Override

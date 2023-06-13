@@ -31,9 +31,9 @@ public class Group {
     private String description;
     @Column(name = "location")
     private String locationName;
-    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private Set<Membership> memberships;
-    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private Set<Activity> activities;
 
     public static Group of(CreateGroupRequest createGroupRequest){

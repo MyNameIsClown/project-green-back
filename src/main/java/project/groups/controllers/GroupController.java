@@ -6,12 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import project.activities.model.Activity;
+import project.activities.model.dto.ActivityShortResponse;
+import project.activities.services.ActivityServiceI;
+import project.activities.services.InvitationServiceI;
 import project.groups.models.Group;
 import project.groups.models.GroupRoleTypes;
 import project.groups.models.Membership;
 import project.groups.models.MembershipKey;
 import project.groups.models.dto.CreateGroupRequest;
 import project.groups.models.dto.GroupDetailResponse;
+import project.groups.models.dto.GroupShortResponse;
 import project.groups.services.GroupServiceI;
 import project.groups.services.MembershipServiceI;
 import project.users.models.User;
@@ -21,6 +26,7 @@ import project.users.services.UserServiceI;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -34,7 +40,13 @@ public class GroupController {
     @Autowired
     private UserServiceI userServiceI;
 
-    @PostMapping("/admin/createGroup")
+    @Autowired
+    private ActivityServiceI activityServiceI;
+
+    @Autowired
+    private InvitationServiceI invitationServiceI;
+
+    @PostMapping("/groups/createGroup")
     @ResponseBody
     public ResponseEntity<Object> createGroup (@RequestBody CreateGroupRequest createGroupRequest, @AuthenticationPrincipal User userLogged){
         if(userLogged.getHaveAGroup()){
@@ -81,22 +93,40 @@ public class GroupController {
 
         return ResponseEntity.ok(membership.getId());
     }
+    @DeleteMapping("/groups/unsubscribe/{id}")
+    @ResponseBody
+    public ResponseEntity<Object> unsubscribe (@PathVariable("id") Long groupId, @AuthenticationPrincipal User userLogged){
+        Group group = groupServiceI.getById(groupId).get();
+        membershipServiceI.unsubscribe(group, userLogged);
+        return ResponseEntity.accepted().body("Unsubscribe");
+    }
 
     @GetMapping("/groups")
     @ResponseBody
-    public List<CreateGroupRequest> getAll() {
+    public List<GroupShortResponse> getAll(@AuthenticationPrincipal User userlogged) {
         return groupServiceI.getAll().stream()
-                .map(group -> CreateGroupRequest.of(group))
+                .map(group -> {
+                    GroupShortResponse groupShortResponse = GroupShortResponse.of(group);
+                    groupShortResponse.setCurrentUserIsRegistrated(membershipServiceI.existMembershipOf(group, userlogged));
+                    return groupShortResponse;
+                })
                 .toList();
     }
 
     @GetMapping("/groups/{id}")
     @ResponseBody
-    public ResponseEntity<GroupDetailResponse> getOne(@PathVariable("id") Long id) {
+    public ResponseEntity<GroupDetailResponse> getOne(@PathVariable("id") Long id, @AuthenticationPrincipal User userLogged) {
         Optional<Group> groupResponse = groupServiceI.getById(id);
-        GroupDetailResponse response = null;
-            List<Membership> members = membershipServiceI.getMembersOf(groupResponse.get());
-            response = GroupDetailResponse.of(groupResponse.get(), members);
+        List<Membership> members = membershipServiceI.getMembersOf(groupResponse.get());
+        GroupDetailResponse response = GroupDetailResponse.of(groupResponse.get(), members);
+        response.setCurrentUserIsRegistrated(membershipServiceI.existMembershipOf(groupResponse.get(), userLogged));
+        List<Activity> groupActivities = null;
+        if(membershipServiceI.existMembershipOf(groupResponse.get(), userLogged)){
+            groupActivities = activityServiceI.getAllByGroup(groupResponse.get());
+        }else{
+            groupActivities = activityServiceI.getAllPublic(groupResponse.get());
+        }
+        response.setActivities(groupActivities.stream().filter(activity -> activity.isCanceled()==false).map((activity -> ActivityShortResponse.of(activity))).collect(Collectors.toList()));
         return ResponseEntity.ok(response);
     }
     @GetMapping("/groups/getOwner/{id}")
@@ -126,6 +156,18 @@ public class GroupController {
             return ResponseEntity.badRequest().body("The user does not own any group");
         }
         return ResponseEntity.ok(GroupDetailResponse.of(group));
+    }
+
+    @DeleteMapping("/groups/{id}/{username}")
+    @ResponseBody
+    public ResponseEntity<Object> deleteUser(@PathVariable("id") Long groupId, @PathVariable("username") String username, @AuthenticationPrincipal User userlogged) {
+        Group group = groupServiceI.getById(groupId).get();
+        if(!membershipServiceI.getOwner(group).equals(userlogged)){
+            return ResponseEntity.badRequest().body("You can't do this because you are not the owner");
+        }
+        User userToDelete = userServiceI.findByUsername(username).get();
+        membershipServiceI.unsubscribe(group, userToDelete);
+        return ResponseEntity.ok("Delete success");
     }
 
 
