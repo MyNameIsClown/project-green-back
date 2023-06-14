@@ -14,16 +14,26 @@ import java.time.LocalDateTime;
 @Builder
 public class ActivityShortResponse {
     Long id;
-    String name;
+    String name, state;
     LocalDateTime celebrationDate;
-    Boolean privacity;
 
     public static ActivityShortResponse of(Activity activity){
         return ActivityShortResponse.builder()
                 .id(activity.getId())
                 .name(activity.getTitle())
-                .privacity(activity.isPrivate())
+                .state(getStringStateFromBooleans(activity))
                 .celebrationDate(activity.getCelebrationDate())
                 .build();
+    }
+    private static String getStringStateFromBooleans(Activity activity){
+        String literal = "Waiting";
+        if(activity.isStarted()){
+            literal = "Started";
+        }else if(activity.isCanceled()){
+            literal = "Canceled";
+        } else if (activity.isFinished()) {
+            literal = "Finished";
+        }
+        return literal;
     }
 }

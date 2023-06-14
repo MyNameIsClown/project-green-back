@@ -120,6 +120,7 @@ public class GroupController {
         List<Membership> members = membershipServiceI.getMembersOf(groupResponse.get());
         GroupDetailResponse response = GroupDetailResponse.of(groupResponse.get(), members);
         response.setCurrentUserIsRegistrated(membershipServiceI.existMembershipOf(groupResponse.get(), userLogged));
+        response.setCurrentUserIsTheOwner(membershipServiceI.getOwner(groupResponse.get()).equals(userLogged));
         List<Activity> groupActivities = null;
         if(membershipServiceI.existMembershipOf(groupResponse.get(), userLogged)){
             groupActivities = activityServiceI.getAllByGroup(groupResponse.get());

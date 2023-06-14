@@ -72,7 +72,8 @@ public class ActivityController {
     @ResponseBody
     public ResponseEntity<Object> getOne (@AuthenticationPrincipal User userLogged){
         List<Invitation> invitations = invitationServiceI.getAllByUser(userLogged);
-        List<ActivityShortResponse> response = invitations.stream().map(invitation -> ActivityShortResponse.of(invitation.getActivity())).collect(Collectors.toList());
+        List<ActivityShortResponse> response = invitations.stream().filter(invitation -> invitation.getActivity().isCanceled()==false)
+                .map(invitation -> ActivityShortResponse.of(invitation.getActivity())).collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
     @GetMapping("/activity/basic/{id}")

@@ -22,6 +22,7 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    @Column(columnDefinition="TEXT")
     private String description;
     private String type;
     private String locationName;

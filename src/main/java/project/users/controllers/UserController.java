@@ -110,13 +110,14 @@ public class UserController {
 		 		if(modified.isPresent()){
 					return ResponseEntity.ok(UserResponse.convertTo(modified.get()));
 				}else{
-					throw new RuntimeException();
+					throw new RuntimeException("Password Data Error");
 				}
+			}else{
+				throw new RuntimeException("The password does not match");
 			}
 		}catch(RuntimeException ex){
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password Data Error");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password Data error");
 		}
-		return null;
 	}
 
 	@GetMapping("/users/currentUser")

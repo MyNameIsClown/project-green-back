@@ -17,7 +17,9 @@ public class ActivityDetailBasicResponse {
     private String title, description, type, locationName;
     private LocalDateTime celebrationDate;
     private LocalDateTime lastTimeToSignUp;
-    private boolean started = false;
+    private boolean started;
+    private boolean canceled;
+    private boolean finished;
     private boolean hasJoined;
     private boolean hasSuscribeToGroup;
 
@@ -31,6 +33,8 @@ public class ActivityDetailBasicResponse {
                 .celebrationDate(activity.getCelebrationDate())
                 .lastTimeToSignUp(activity.getLastTimeToSignUp())
                 .started(activity.isStarted())
+                .canceled(activity.isCanceled())
+                .finished(activity.isFinished())
                 .build();
     }
 }

@@ -13,6 +13,7 @@ public class GroupShortResponse {
     String name, description, locationName;
 
     Boolean currentUserIsRegistrated;
+    Boolean currentUserIsTheOwner;
 
     public static GroupShortResponse of(Group group){
         return GroupShortResponse.builder()
